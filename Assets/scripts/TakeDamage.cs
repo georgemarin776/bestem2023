@@ -16,14 +16,7 @@ public class TakeDamage : MonoBehaviour
     }
 
     public void OnTakeDamage(float damage)
-    { 
-        StartCoroutine(OnDamage(0.6f, damage));
-    }
-
-    IEnumerator OnDamage(float waitTime, float damage)
     {
-        yield return new WaitForSeconds(waitTime);
-
         currentHealth -= damage;
 
         // Invoke("DeployAnimation", 0.6f);

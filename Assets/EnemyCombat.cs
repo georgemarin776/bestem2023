@@ -13,6 +13,7 @@ public class EnemyCombat : MonoBehaviour
 
     public float attackRate = 2f;
     float nextAttackTime = 0f;
+    float nextDefenseTime = 0f;
 
     // Update is called once per frame
     void Update()
@@ -27,7 +28,27 @@ public class EnemyCombat : MonoBehaviour
                 nextAttackTime = Time.time + 0.875f;
             }
         }
+
+        if (Time.time >= nextDefenseTime)
+        {
+            GetComponent<EnemyMovement>().isInDefense = false;
+
+            if (Input.GetKeyDown(KeyCode.O))
+            {
+                Defense();
+
+                nextDefenseTime = Time.time + 1f;
+            }
+        }
     }
+
+    void Defense()
+    {
+        animator.SetTrigger("Block");
+
+        GetComponent<EnemyMovement>().isInDefense = true;
+    }
+
 
     void Attack()
     {
@@ -36,12 +57,18 @@ public class EnemyCombat : MonoBehaviour
 
         GetComponent<EnemyMovement>().isInAttack = true;
 
+        StartCoroutine(CheckForPlayersInRange(0.6f));
+    }
+    IEnumerator CheckForPlayersInRange(float waitTime)
+    {
+        yield return new WaitForSeconds(waitTime);
+
         // Detect players in range of attack
         Collider2D[] hittedPlayers = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, playerLayers);
 
-        foreach (Collider2D enemy in hittedPlayers)
+        foreach (Collider2D player in hittedPlayers)
         {
-            enemy.GetComponent<PlayerTakeDamage>().OnTakeDamage(40);
+            player.GetComponent<PlayerTakeDamage>().OnTakeDamage(40);
         }
     }
 

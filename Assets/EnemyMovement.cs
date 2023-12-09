@@ -15,6 +15,7 @@ public class EnemyMovement : MonoBehaviour
     private bool m_isDead = false;
 
     public bool isInAttack = false;
+    public bool isInDefense = false;
 
     // Use this for initialization
     void Start()
@@ -43,7 +44,7 @@ public class EnemyMovement : MonoBehaviour
 
         // -- Handle input and movement --
         float inputX = 0;
-        if (!isInAttack)
+        if (!isInAttack && !isInDefense)
         {
             if (Input.GetKey(KeyCode.LeftArrow))
                 inputX = -1;
@@ -71,33 +72,9 @@ public class EnemyMovement : MonoBehaviour
         m_animator.SetFloat("AirSpeed", m_body2d.velocity.y);
 
         // -- Handle Animations --
-        //Death
-        if (Input.GetKeyDown("e"))
-        {
-            if (!m_isDead)
-                m_animator.SetTrigger("Death");
-            else
-                m_animator.SetTrigger("Recover");
-
-            m_isDead = !m_isDead;
-        }
-
-        //Hurt
-        else if (Input.GetKeyDown("q"))
-            m_animator.SetTrigger("Hurt");
-
-        //Attack
-        else if (Input.GetMouseButtonDown(0))
-        {
-            m_animator.SetTrigger("Attack");
-        }
-
-        //Change between idle and combat idle
-        else if (Input.GetKeyDown("f"))
-            m_combatIdle = !m_combatIdle;
 
         //Jump
-        else if (Input.GetKeyDown(KeyCode.UpArrow) && m_grounded)
+        if (Input.GetKeyDown(KeyCode.UpArrow) && m_grounded)
         {
             m_animator.SetTrigger("Jump");
             m_grounded = false;

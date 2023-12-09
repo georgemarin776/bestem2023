@@ -4,7 +4,13 @@ using Unity.VisualScripting;
 
 public class Movement : MonoBehaviour
 {
+    public const float DIRECTION_TIME_TRESHOLD = 2f; 
+
     public bool isInAttack = false;
+    public bool isInDefense = false;
+
+    public bool isAttakingInDirection = false;
+    public float attackTime;
 
     [SerializeField] float m_speed = 4.0f;
     [SerializeField] float m_jumpForce = 7.5f;
@@ -28,7 +34,7 @@ public class Movement : MonoBehaviour
     {
         //Check if character just landed on the ground
         if (!m_grounded && m_groundSensor.State())
-        {
+        { 
             m_grounded = true;
             m_animator.SetBool("Grounded", m_grounded);
         }
@@ -42,7 +48,7 @@ public class Movement : MonoBehaviour
 
         // -- Handle input and movement --
         float inputX = 0;
-        if (!isInAttack)
+        if (!isInAttack && !isInDefense)
         {
             if (Input.GetKey(KeyCode.A))
                 inputX = -1;
@@ -70,19 +76,21 @@ public class Movement : MonoBehaviour
         m_animator.SetFloat("AirSpeed", m_body2d.velocity.y);
 
         // -- Handle Animations --
-
-        //Change between idle and combat idle
-        if (Input.GetKeyDown("f"))
-            m_combatIdle = !m_combatIdle;
-
         //Jump
-        else if (Input.GetKeyDown(KeyCode.W) && m_grounded)
+        if (Input.GetKeyDown(KeyCode.W) && m_grounded)
         {
             m_animator.SetTrigger("Jump");
             m_grounded = false;
             m_animator.SetBool("Grounded", m_grounded);
             m_body2d.velocity = new Vector2(m_body2d.velocity.x, m_jumpForce);
             m_groundSensor.Disable(0.2f);
+        }
+
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            isAttakingInDirection = true;
+            // Get current time, so it refreshes back to false when not pressing a direction after n seconds
+            attackTime = Time.time;
         }
 
         //Run
@@ -96,5 +104,14 @@ public class Movement : MonoBehaviour
         //Idle
         else
             m_animator.SetInteger("AnimState", 0);
+
+
+        if (Time.time - attackTime > DIRECTION_TIME_TRESHOLD)
+        {
+            isAttakingInDirection = false;
+        }
+
+        Debug.Log(attackTime);
+        Debug.Log(isAttakingInDirection);
     }
 }
