@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using Unity.VisualScripting;
 
 public class Movement : MonoBehaviour
 {
@@ -40,7 +41,17 @@ public class Movement : MonoBehaviour
         }
 
         // -- Handle input and movement --
-        float inputX = Input.GetAxis("Horizontal");
+        float inputX = 0;
+        if (Input.GetKey(KeyCode.LeftArrow))
+            inputX = -1;
+        else if (Input.GetKey(KeyCode.RightArrow))
+            inputX = 1;
+
+        // Swap direction of sprite depending on walk direction
+        if (inputX > 0)
+            transform.localScale = new Vector3(-1.0f, 1.0f, 1.0f);
+        else if (inputX < 0)
+            transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
 
         // Swap direction of sprite depending on walk direction
         if (inputX > 0)
@@ -81,7 +92,7 @@ public class Movement : MonoBehaviour
             m_combatIdle = !m_combatIdle;
 
         //Jump
-        else if (Input.GetKeyDown("space") && m_grounded)
+        else if (Input.GetKeyDown(KeyCode.UpArrow) && m_grounded)
         {
             m_animator.SetTrigger("Jump");
             m_grounded = false;
