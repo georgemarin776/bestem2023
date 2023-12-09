@@ -2,9 +2,8 @@ using UnityEngine;
 using System.Collections;
 using Unity.VisualScripting;
 
-public class Movement : MonoBehaviour
+public class EnemyMovement : MonoBehaviour
 {
-
     [SerializeField] float m_speed = 4.0f;
     [SerializeField] float m_jumpForce = 7.5f;
 
@@ -42,9 +41,9 @@ public class Movement : MonoBehaviour
 
         // -- Handle input and movement --
         float inputX = 0;
-        if (Input.GetKey(KeyCode.A))
+        if (Input.GetKey(KeyCode.LeftArrow))
             inputX = -1;
-        else if (Input.GetKey(KeyCode.D))
+        else if (Input.GetKey(KeyCode.RightArrow))
             inputX = 1;
 
         // Swap direction of sprite depending on walk direction
@@ -92,7 +91,7 @@ public class Movement : MonoBehaviour
             m_combatIdle = !m_combatIdle;
 
         //Jump
-        else if (Input.GetKeyDown(KeyCode.W) && m_grounded)
+        else if (Input.GetKeyDown(KeyCode.UpArrow) && m_grounded)
         {
             m_animator.SetTrigger("Jump");
             m_grounded = false;

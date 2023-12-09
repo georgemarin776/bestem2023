@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class TakeDamage : MonoBehaviour
-{
+{ 
     public Animator animator;
 
     private float maxHealth = 100;
@@ -19,19 +19,21 @@ public class TakeDamage : MonoBehaviour
     {
         currentHealth -= damage;
 
-        animator.SetTrigger("Hurt");
-
+        Invoke("deployAnimation", 0.6f);
+        
         if (currentHealth <= 0)
         {
             Die();
         }
     }
 
+    void deployAnimation()
+    {
+        animator.SetTrigger("Hurt");
+    }
+
     void Die()
     {
         animator.SetBool("IsDead", true);
-
-        GetComponent<Collider2D>().enabled = false; 
-        this.enabled = false;
     }
 }
