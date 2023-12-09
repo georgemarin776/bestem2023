@@ -14,6 +14,8 @@ public class EnemyMovement : MonoBehaviour
     private bool m_combatIdle = false;
     private bool m_isDead = false;
 
+    public bool isInAttack = false;
+
     // Use this for initialization
     void Start()
     {
@@ -41,10 +43,14 @@ public class EnemyMovement : MonoBehaviour
 
         // -- Handle input and movement --
         float inputX = 0;
-        if (Input.GetKey(KeyCode.LeftArrow))
-            inputX = -1;
-        else if (Input.GetKey(KeyCode.RightArrow))
-            inputX = 1;
+        if (!isInAttack)
+        {
+            if (Input.GetKey(KeyCode.LeftArrow))
+                inputX = -1;
+            else if (Input.GetKey(KeyCode.RightArrow))
+                inputX = 1;
+        }
+
 
         // Swap direction of sprite depending on walk direction
         if (inputX > 0)
@@ -111,5 +117,7 @@ public class EnemyMovement : MonoBehaviour
         //Idle
         else
             m_animator.SetInteger("AnimState", 0);
+
+
     }
 }

@@ -19,11 +19,12 @@ public class EnemyCombat : MonoBehaviour
     {
         if (Time.time >= nextAttackTime)
         {
+            GetComponent<EnemyMovement>().isInAttack = false;
 
             if (Input.GetKeyDown(KeyCode.P))
             {
                 Attack();
-                nextAttackTime = Time.time + 1f / attackRate;
+                nextAttackTime = Time.time + 0.875f;
             }
         }
     }
@@ -32,6 +33,8 @@ public class EnemyCombat : MonoBehaviour
     {
         // play the attack animator
         animator.SetTrigger("Attack");
+
+        GetComponent<EnemyMovement>().isInAttack = true;
 
         // Detect players in range of attack
         Collider2D[] hittedPlayers = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, playerLayers);

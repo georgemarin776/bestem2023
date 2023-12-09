@@ -4,6 +4,7 @@ using Unity.VisualScripting;
 
 public class Movement : MonoBehaviour
 {
+    public bool isInAttack = false;
 
     [SerializeField] float m_speed = 4.0f;
     [SerializeField] float m_jumpForce = 7.5f;
@@ -13,7 +14,6 @@ public class Movement : MonoBehaviour
     private Sensor_Bandit m_groundSensor;
     private bool m_grounded = false;
     private bool m_combatIdle = false;
-    private bool m_isDead = false;
 
     // Use this for initialization
     void Start()
@@ -42,10 +42,14 @@ public class Movement : MonoBehaviour
 
         // -- Handle input and movement --
         float inputX = 0;
-        if (Input.GetKey(KeyCode.A))
-            inputX = -1;
-        else if (Input.GetKey(KeyCode.D))
-            inputX = 1;
+        if (!isInAttack)
+        {
+            if (Input.GetKey(KeyCode.A))
+                inputX = -1;
+            else if (Input.GetKey(KeyCode.D))
+                inputX = 1;
+        }
+
 
         // Swap direction of sprite depending on walk direction
         if (inputX > 0)
@@ -66,29 +70,9 @@ public class Movement : MonoBehaviour
         m_animator.SetFloat("AirSpeed", m_body2d.velocity.y);
 
         // -- Handle Animations --
-        //Death
-        if (Input.GetKeyDown("e"))
-        {
-            if (!m_isDead)
-                m_animator.SetTrigger("Death");
-            else
-                m_animator.SetTrigger("Recover");
-
-            m_isDead = !m_isDead;
-        }
-
-        //Hurt
-        else if (Input.GetKeyDown("q"))
-            m_animator.SetTrigger("Hurt");
-
-        //Attack
-        else if (Input.GetMouseButtonDown(0))
-        {
-            m_animator.SetTrigger("Attack");
-        }
 
         //Change between idle and combat idle
-        else if (Input.GetKeyDown("f"))
+        if (Input.GetKeyDown("f"))
             m_combatIdle = !m_combatIdle;
 
         //Jump
