@@ -55,13 +55,45 @@ public class EnemyCombat : MonoBehaviour
 
         if (Time.time >= nextDefenseTime)
         {
+            for (int i = 0; i < 4; i++)
+            {
+                GetComponent<EnemyMovement>().isGuarding[i] = false;
+            }
+
+
             GetComponent<EnemyMovement>().isInDefense = false;
 
-            if (Input.GetKeyDown(KeyCode.O))
+            if (GetComponent<EnemyMovement>().isGuardingInDirection)
             {
-                Defense();
-
-                nextDefenseTime = Time.time + 1f;
+                if (Input.GetKeyDown(KeyCode.RightArrow))
+                {
+                    Debug.Log("asdfadsfa");
+                    Defense();
+                    GetComponent<EnemyMovement>().isGuarding[1] = true;
+                    nextDefenseTime = Time.time + 0.875f;
+                    GetComponent<EnemyMovement>().isGuardingInDirection = false;
+                }
+                else if (Input.GetKeyDown(KeyCode.LeftArrow))
+                {
+                    Defense();
+                    GetComponent<EnemyMovement>().isGuarding[0] = true;
+                    nextDefenseTime = Time.time + 0.875f;
+                    GetComponent<EnemyMovement>().isGuardingInDirection = false;
+                }
+                else if (Input.GetKeyDown(KeyCode.UpArrow))
+                {
+                    Defense();
+                    GetComponent<EnemyMovement>().isGuarding[2] = true;
+                    nextDefenseTime = Time.time + 0.875f;
+                    GetComponent<EnemyMovement>().isGuardingInDirection = false;
+                }
+                else if (Input.GetKeyDown(KeyCode.DownArrow))
+                {
+                    Defense();
+                    GetComponent<EnemyMovement>().isGuarding[3] = true;
+                    nextDefenseTime = Time.time + 0.875f;
+                    GetComponent<EnemyMovement>().isGuardingInDirection = false;
+                }
             }
         }
     }

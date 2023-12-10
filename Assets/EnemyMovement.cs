@@ -20,7 +20,11 @@ public class EnemyMovement : MonoBehaviour
     private const float DIRECTION_TIME_TRESHOLD = 1f;
 
     public bool isAttakingInDirection = false;
+    public bool isGuardingInDirection = false;
     public float attackTime;
+    public float defenseTime;
+
+    public bool[] isGuarding = new bool[4];
 
     // Use this for initialization
     void Start()
@@ -85,6 +89,13 @@ public class EnemyMovement : MonoBehaviour
             attackTime = Time.time;
         }
 
+        if (Input.GetKeyDown(KeyCode.O))
+        {
+            isGuardingInDirection = true;
+
+            defenseTime = Time.time;
+        }
+
         //Jump
         if (Input.GetKeyDown(KeyCode.UpArrow) && m_grounded && !isAttakingInDirection)
         {
@@ -110,6 +121,11 @@ public class EnemyMovement : MonoBehaviour
         if (Time.time - attackTime > DIRECTION_TIME_TRESHOLD)
         {
             isAttakingInDirection = false;
+        }
+
+        if (Time.time - defenseTime > DIRECTION_TIME_TRESHOLD)
+        {
+            isGuardingInDirection = false;
         }
     }
 }

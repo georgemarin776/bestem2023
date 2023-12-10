@@ -15,7 +15,6 @@ public class Combat : MonoBehaviour
 
     float nextAttackTime = 0f;
     float nextDefenseTime = 0f;
-    float nextAfterDefense = 0f;
 
     // Update is called once per frame
     void Update()
@@ -68,14 +67,14 @@ public class Combat : MonoBehaviour
                 {
                     Debug.Log("asdfadsfa");
                     Defense();
-                    GetComponent<Movement>().isGuarding[0] = true;
+                    GetComponent<Movement>().isGuarding[1] = true;
                     nextDefenseTime = Time.time + 0.875f;
                     GetComponent<Movement>().isGuardingInDirection = false;
                 }
                 else if (Input.GetKeyDown(KeyCode.A))
                 {
                     Defense();
-                    GetComponent<Movement>().isGuarding[1] = true;
+                    GetComponent<Movement>().isGuarding[0] = true;
                     nextDefenseTime = Time.time + 0.875f;
                     GetComponent<Movement>().isGuardingInDirection = false;
                 }
@@ -129,11 +128,11 @@ public class Combat : MonoBehaviour
 
         GetComponent<Movement>().isInAttack = true;
 
-        StartCoroutine(CheckForEnemiesInRange(0.6f));
+        StartCoroutine(CheckForEnemiesInRange(0.6f, direction));
 
     }
 
-    IEnumerator CheckForEnemiesInRange(float waitTime)
+    IEnumerator CheckForEnemiesInRange(float waitTime, int direction)
     {
         yield return new WaitForSeconds(waitTime);
 
@@ -141,7 +140,7 @@ public class Combat : MonoBehaviour
 
         foreach (Collider2D enemy in hittedEnemies)
         {
-            enemy.GetComponent<TakeDamage>().OnTakeDamage(40);
+            enemy.GetComponent<TakeDamage>().OnTakeDamage(40, direction);
         }
     }
 

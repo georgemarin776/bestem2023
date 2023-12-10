@@ -23,8 +23,13 @@ public class TakeDamage : MonoBehaviour
         }
     }
 
-    public void OnTakeDamage(float damage)
+    public void OnTakeDamage(float damage, int direction)
     {
+        if (GetComponent<EnemyMovement>().isGuarding[direction])
+        {
+            return;
+        }
+
         currentHealth -= damage;
         UpdateHealthUI(); // Update the health bar
 
