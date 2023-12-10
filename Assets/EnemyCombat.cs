@@ -98,9 +98,11 @@ public class EnemyCombat : MonoBehaviour
 
         GetComponent<EnemyMovement>().isInAttack = true;
 
-        StartCoroutine(CheckForPlayersInRange(0.6f));
+
+        StartCoroutine(CheckForPlayersInRange(0.6f, direction));
+
     }
-    IEnumerator CheckForPlayersInRange(float waitTime)
+    IEnumerator CheckForPlayersInRange(float waitTime, int direction)
     {
         yield return new WaitForSeconds(waitTime);
 
@@ -109,7 +111,7 @@ public class EnemyCombat : MonoBehaviour
 
         foreach (Collider2D player in hittedPlayers)
         {
-            player.GetComponent<PlayerTakeDamage>().OnTakeDamage(40);
+            player.GetComponent<PlayerTakeDamage>().OnTakeDamage(40, direction);
         }
     }
 

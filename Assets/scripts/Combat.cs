@@ -6,7 +6,7 @@ using UnityEngine;
 public class Combat : MonoBehaviour
 {
     public Animator animator;
-
+    public bool enter = false;
     public Transform attackPoint;
     public float attackRange = 0.5f;
     public LayerMask enemyLayers;
@@ -15,6 +15,7 @@ public class Combat : MonoBehaviour
 
     float nextAttackTime = 0f;
     float nextDefenseTime = 0f;
+    float nextAfterDefense = 0f;
 
     // Update is called once per frame
     void Update()
@@ -53,13 +54,45 @@ public class Combat : MonoBehaviour
 
         if (Time.time >= nextDefenseTime)
         {
+            for(int i = 0; i<4; i++)
+            {
+                GetComponent<Movement>().isGuarding[i] = false; 
+            }
+
             GetComponent<Movement>().isInDefense = false;
 
-            if (Input.GetKeyDown(KeyCode.Q))
+            if (GetComponent<Movement>().isGuardingInDirection)
             {
-                Defense();
-
-                nextDefenseTime = Time.time + 1f;
+                Debug.Log(GetComponent<Movement>().isGuardingInDirection);
+                if (Input.GetKeyDown(KeyCode.D))
+                {
+                    Debug.Log("asdfadsfa");
+                    Defense();
+                    GetComponent<Movement>().isGuarding[0] = true;
+                    nextDefenseTime = Time.time + 0.875f;
+                    GetComponent<Movement>().isGuardingInDirection = false;
+                }
+                else if (Input.GetKeyDown(KeyCode.A))
+                {
+                    Defense();
+                    GetComponent<Movement>().isGuarding[1] = true;
+                    nextDefenseTime = Time.time + 0.875f;
+                    GetComponent<Movement>().isGuardingInDirection = false;
+                }
+                else if (Input.GetKeyDown(KeyCode.W))
+                {
+                    Defense();
+                    GetComponent<Movement>().isGuarding[2] = true;
+                    nextDefenseTime = Time.time + 0.875f;
+                    GetComponent<Movement>().isGuardingInDirection = false;
+                }
+                else if (Input.GetKeyDown(KeyCode.S))
+                {
+                    Defense();
+                    GetComponent<Movement>().isGuarding[3] = true;
+                    nextDefenseTime = Time.time + 0.875f;
+                    GetComponent<Movement>().isGuardingInDirection = false;
+                }
             }
         }
     }
@@ -96,9 +129,8 @@ public class Combat : MonoBehaviour
 
         GetComponent<Movement>().isInAttack = true;
 
-        // Detect enemies in range of attack
-
         StartCoroutine(CheckForEnemiesInRange(0.6f));
+
     }
 
     IEnumerator CheckForEnemiesInRange(float waitTime)
@@ -109,8 +141,6 @@ public class Combat : MonoBehaviour
 
         foreach (Collider2D enemy in hittedEnemies)
         {
-            // TODO: asteapta 0.6 secunde si dupa verifica daca e in range
-
             enemy.GetComponent<TakeDamage>().OnTakeDamage(40);
         }
     }

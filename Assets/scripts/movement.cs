@@ -10,7 +10,9 @@ public class Movement : MonoBehaviour
     public bool isInDefense = false;
 
     public bool isAttakingInDirection = false;
+    public bool isGuardingInDirection = false;
     public float attackTime;
+    public float defenseTime;
 
     [SerializeField] float m_speed = 4.0f;
     [SerializeField] float m_jumpForce = 7.5f;
@@ -20,6 +22,8 @@ public class Movement : MonoBehaviour
     private Sensor_Bandit m_groundSensor;
     private bool m_grounded = false;
     private bool m_combatIdle = false;
+
+    public bool[] isGuarding = new bool[4];
 
     // Use this for initialization
     void Start()
@@ -55,7 +59,6 @@ public class Movement : MonoBehaviour
             else if (Input.GetKey(KeyCode.D))
                 inputX = 1;
         }
-
 
         // Swap direction of sprite depending on walk direction
         if (inputX > 0)
@@ -93,6 +96,13 @@ public class Movement : MonoBehaviour
             attackTime = Time.time;
         }
 
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            isGuardingInDirection = true;
+
+            defenseTime = Time.time;    
+        }
+
         //Run
         else if (Mathf.Abs(inputX) > Mathf.Epsilon)
             m_animator.SetInteger("AnimState", 2);
@@ -110,6 +120,9 @@ public class Movement : MonoBehaviour
             isAttakingInDirection = false;
         }
 
-        Debug.Log(isAttakingInDirection);
+        if (Time.time - defenseTime > DIRECTION_TIME_TRESHOLD)
+        {
+            isGuardingInDirection = false;
+        }
     }
 }
