@@ -48,6 +48,8 @@ public class PlayerTakeDamage : MonoBehaviour
     void Die()
     {
         animator.SetBool("IsDead", true);
+
+
     }
 
     void UpdateHealthUI()
