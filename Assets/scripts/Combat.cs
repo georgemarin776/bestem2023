@@ -11,6 +11,8 @@ public class Combat : MonoBehaviour
     public float attackRange = 0.5f;
     public LayerMask enemyLayers;
 
+    public Animator hitIndicatorAnimator;
+
     float nextAttackTime = 0f;
     float nextDefenseTime = 0f;
 
@@ -22,24 +24,27 @@ public class Combat : MonoBehaviour
             GetComponent<Movement>().isInAttack = false;
             if (GetComponent<Movement>().isAttakingInDirection)
             {
-                if (Input.GetKeyDown(KeyCode.F1))
+                if (Input.GetKeyDown(KeyCode.D))
                 {
-                    Attack();
+                    Attack(0);
                     nextAttackTime = Time.time + 0.875f;
                     GetComponent<Movement>().isAttakingInDirection = false;
-                } else if (Input.GetKeyDown(KeyCode.F2))
+                }
+                else if (Input.GetKeyDown(KeyCode.A))
                 {
-                    Attack();
+                    Attack(1);
                     nextAttackTime = Time.time + 0.875f;
                     GetComponent<Movement>().isAttakingInDirection = false;
-                } else if (Input.GetKeyDown(KeyCode.F3))
+                }
+                else if (Input.GetKeyDown(KeyCode.W))
                 {
-                    Attack();
+                    Attack(2);
                     nextAttackTime = Time.time + 0.875f;
                     GetComponent<Movement>().isAttakingInDirection = false;
-                } else if (Input.GetKeyDown(KeyCode.F4))
+                }
+                else if (Input.GetKeyDown(KeyCode.S))
                 {
-                    Attack();
+                    Attack(3);
                     nextAttackTime = Time.time + 0.875f;
                     GetComponent<Movement>().isAttakingInDirection = false;
                 }
@@ -66,8 +71,26 @@ public class Combat : MonoBehaviour
         GetComponent<Movement>().isInDefense = true;
     }
 
-    void Attack()
+    void Attack(int direction)
     {
+        switch (direction)
+        {
+            case 0:
+                hitIndicatorAnimator.SetTrigger("leftHit");
+                break;
+            case 1:
+                hitIndicatorAnimator.SetTrigger("leftHit");
+                break;
+            case 2:
+                hitIndicatorAnimator.SetTrigger("topHit");
+                break;
+            case 3:
+                hitIndicatorAnimator.SetTrigger("bottomHit");
+                break;
+
+            default: break;
+        }
+
         // play the attack animator
         animator.SetTrigger("Attack");
 

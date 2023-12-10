@@ -4,7 +4,7 @@ using Unity.VisualScripting;
 
 public class Movement : MonoBehaviour
 {
-    public const float DIRECTION_TIME_TRESHOLD = 2f; 
+    private const float DIRECTION_TIME_TRESHOLD = 1f; 
 
     public bool isInAttack = false;
     public bool isInDefense = false;
@@ -77,7 +77,7 @@ public class Movement : MonoBehaviour
 
         // -- Handle Animations --
         //Jump
-        if (Input.GetKeyDown(KeyCode.W) && m_grounded)
+        if (Input.GetKeyDown(KeyCode.W) && m_grounded && !isAttakingInDirection)
         {
             m_animator.SetTrigger("Jump");
             m_grounded = false;
@@ -105,13 +105,11 @@ public class Movement : MonoBehaviour
         else
             m_animator.SetInteger("AnimState", 0);
 
-
         if (Time.time - attackTime > DIRECTION_TIME_TRESHOLD)
         {
             isAttakingInDirection = false;
         }
 
-        Debug.Log(attackTime);
         Debug.Log(isAttakingInDirection);
     }
 }

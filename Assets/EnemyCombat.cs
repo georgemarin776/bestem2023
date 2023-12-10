@@ -15,6 +15,8 @@ public class EnemyCombat : MonoBehaviour
     float nextAttackTime = 0f;
     float nextDefenseTime = 0f;
 
+    public Animator hitIndicatorAnimator;
+
     // Update is called once per frame
     void Update()
     {
@@ -22,10 +24,32 @@ public class EnemyCombat : MonoBehaviour
         {
             GetComponent<EnemyMovement>().isInAttack = false;
 
-            if (Input.GetKeyDown(KeyCode.P))
+            if (GetComponent<EnemyMovement>().isAttakingInDirection)
             {
-                Attack();
-                nextAttackTime = Time.time + 0.875f;
+                if (Input.GetKeyDown(KeyCode.RightArrow))
+                {
+                    Attack(0);
+                    nextAttackTime = Time.time + 0.875f;
+                    GetComponent<EnemyMovement>().isAttakingInDirection = false;
+                }
+                else if (Input.GetKeyDown(KeyCode.LeftArrow))
+                {
+                    Attack(1);
+                    nextAttackTime = Time.time + 0.875f;
+                    GetComponent<EnemyMovement>().isAttakingInDirection = false;
+                }
+                else if (Input.GetKeyDown(KeyCode.UpArrow))
+                {
+                    Attack(2);
+                    nextAttackTime = Time.time + 0.875f;
+                    GetComponent<EnemyMovement>().isAttakingInDirection = false;
+                }
+                else if (Input.GetKeyDown(KeyCode.DownArrow))
+                {
+                    Attack(3);
+                    nextAttackTime = Time.time + 0.875f;
+                    GetComponent<EnemyMovement>().isAttakingInDirection = false;
+                }
             }
         }
 
@@ -50,8 +74,25 @@ public class EnemyCombat : MonoBehaviour
     }
 
 
-    void Attack()
+    void Attack(int direction)
     {
+        switch (direction)
+        {
+            case 0:
+                hitIndicatorAnimator.SetTrigger("rightHit");
+                break;
+            case 1:
+                hitIndicatorAnimator.SetTrigger("rightHit");
+                break;
+            case 2:
+                hitIndicatorAnimator.SetTrigger("topHit");
+                break;
+            case 3:
+                hitIndicatorAnimator.SetTrigger("bottomHit");
+                break;
+
+            default: break;
+        }
         // play the attack animator
         animator.SetTrigger("Attack");
 
