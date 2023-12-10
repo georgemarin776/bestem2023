@@ -12,10 +12,15 @@ public class EnemyMovement : MonoBehaviour
     private Sensor_Bandit m_groundSensor;
     private bool m_grounded = false;
     private bool m_combatIdle = false;
-    private bool m_isDead = false;
 
     public bool isInAttack = false;
     public bool isInDefense = false;
+
+
+    private const float DIRECTION_TIME_TRESHOLD = 1f;
+
+    public bool isAttakingInDirection = false;
+    public float attackTime;
 
     // Use this for initialization
     void Start()
@@ -73,8 +78,15 @@ public class EnemyMovement : MonoBehaviour
 
         // -- Handle Animations --
 
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            isAttakingInDirection = true;
+
+            attackTime = Time.time;
+        }
+
         //Jump
-        if (Input.GetKeyDown(KeyCode.UpArrow) && m_grounded)
+        if (Input.GetKeyDown(KeyCode.UpArrow) && m_grounded && !isAttakingInDirection)
         {
             m_animator.SetTrigger("Jump");
             m_grounded = false;
@@ -95,6 +107,9 @@ public class EnemyMovement : MonoBehaviour
         else
             m_animator.SetInteger("AnimState", 0);
 
-
+        if (Time.time - attackTime > DIRECTION_TIME_TRESHOLD)
+        {
+            isAttakingInDirection = false;
+        }
     }
 }
